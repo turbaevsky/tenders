@@ -68,7 +68,7 @@ datetime.timedelta(days=3),'%Y-%m-%d')
     base_filters = [['status', FilterNotEqual, 'declined'],
 	['status', FilterNotEqual,'dub'],
 	['status', FilterNotEqual,'PIN'],
-	['status', FilterNotEqual,'cancelled'],
+       # ['status', FilterNotEqual,'cancelled'],
 	['status', FilterNotEqual,'outdated'],
        # ['status', FilterEqual, 'sent'],
        # ['status', FilterEqual, 'active'],
