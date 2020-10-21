@@ -27,6 +27,11 @@ class DistChartView(GroupByChartView):
 ]
 
 
+class usersView(ModelView):
+    datamodel = SQLAInterface(Users)
+    list_columns = ['name']
+
+
 class linkedView(ModelView):
     datamodel = SQLAInterface(linked)
     list_columns = ['href']
@@ -41,6 +46,12 @@ class commView(ModelView):
     datamodel = SQLAInterface(Comm)
     list_columns = ['comm']
 
+
+class taskCommView(ModelView):
+    datamodel = SQLAInterface(taskComm)
+    list_columns = ['comm']
+
+
 class FilesModelView(ModelView):
     datamodel = SQLAInterface(files)
     #label_columns = {"file_name": "File Name", "download": "Download"}
@@ -50,9 +61,22 @@ class FilesModelView(ModelView):
     #show_columns = ["file_name", "download"]    
 
 
+class taskFileView(ModelView):
+    datamodel = SQLAInterface(taskFile)
+    list_columns = ["file_name", "download"]
+
+class tasksView(ModelView):
+    datamodel = SQLAInterface(Tasks)
+    list_columns = ['id','description','start','end','len','parent','relatedOn']
+    #edit_columns = ['id','tender_id','start','end','description','parent','relatedOn']
+    related_views = [usersView, taskFileView, taskCommView]
+
+
+
+ 
 class tendersView(ModelView):
     datamodel = SQLAInterface(tenders)
-    related_views = [linkedView, descView, commView, FilesModelView]
+    related_views = [linkedView, descView, commView, FilesModelView, tasksView]
 
     #show_template = "appbuilder/general/model/show_cascade.html"
     #edit_template = "appbuilder/general/model/edit_cascade.html"
@@ -99,6 +123,13 @@ datetime.timedelta(days=3),'%Y-%m-%d')
         self.datamodel.edit(item)
         return redirect(self.get_redirect())
 
+    @action(
+        "proceed", "Proceed", "Do you really want to?", "fa-rocket"
+    )
+    def web(self, item):
+        item.status = 'proceed'
+        self.datamodel.edit(item)
+        return redirect(self.get_redirect())
 
     @action(
         "review", "Review", "Do you really want to?", "fa-rocket"
@@ -172,6 +203,38 @@ appbuilder.add_view(
 appbuilder.add_view(
     FilesModelView,
     "Files",
+    icon="fa-folder-open-o",
+    category="Contacts",
+    category_icon="fa-envelope",
+)
+
+appbuilder.add_view(
+    tasksView,
+    "Tasks",
+    icon="fa-folder-open-o",
+    category="Contacts",
+    category_icon="fa-envelope",
+)
+
+appbuilder.add_view(
+    usersView,
+    "Task users",
+    icon="fa-folder-open-o",
+    category="Contacts",
+    category_icon="fa-envelope",
+)
+
+appbuilder.add_view(
+    taskFileView,
+    "Task related files",
+    icon="fa-folder-open-o",
+    category="Contacts",
+    category_icon="fa-envelope",
+)
+
+appbuilder.add_view(
+    taskCommView,
+    "Task related comms",
     icon="fa-folder-open-o",
     category="Contacts",
     category_icon="fa-envelope",
