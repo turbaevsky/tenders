@@ -17,7 +17,7 @@ class tenders(Model):
     Adate = Column(Date)
     status = Column(String(10))
     added = Column(Date)
-    #comm = Column(String)
+    type = Column(String)
 
     def __repr__(self):
         return self.name

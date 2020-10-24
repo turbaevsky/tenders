@@ -71,8 +71,6 @@ class tasksView(ModelView):
     #edit_columns = ['id','tender_id','start','end','description','parent','relatedOn']
     related_views = [usersView, taskFileView, taskCommView]
 
-
-
  
 class tendersView(ModelView):
     datamodel = SQLAInterface(tenders)
@@ -83,7 +81,7 @@ class tendersView(ModelView):
     
     #add_columns = ["name",'Sdate','status']
     #edit_columns = ["name",'Sdate','status']
-    list_columns = ["name", "Sdate", "status"]
+    list_columns = ["name", "Sdate", "type", "status"]
     #show_fieldsets = [("Info", {"fields": ["name"]})]
     
     
@@ -115,6 +113,15 @@ datetime.timedelta(days=3),'%Y-%m-%d')
         return redirect(self.get_redirect())
 
 
+    @action(
+        "out", "Outdated", "Do you really want to?", "fa-rocket"
+    )
+    def out(self, item):
+        item.status = 'outdated'
+        self.datamodel.edit(item)
+        return redirect(self.get_redirect())
+
+ 
     @action(
         "web", "Web", "Do you really want to?", "fa-rocket"
     )
